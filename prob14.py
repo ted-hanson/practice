@@ -1,22 +1,24 @@
-known = {1:1}
+def isOdd(n):
+  return bool(n & 1)
 
-maxCount = -1
-num = None
-for i in range(1,10**7):
+known = {1:0}
+def calcIters(num):
+  onum = num
   count = 0
-  curNum = i
-  while i > 1:
-    if i in known:
-      break
-    elif float(i)/2 == i/2:
-      i /= 2
+  while num not in known:
+    if isOdd(num):
+      num = 3 * num + 1
     else:
-      i *= 3
-      i += 1
+      num /= 2
     count += 1
-  known[curNum] = known[i] + count
-  if count > maxCount:
-    maxCount = count
-    num = curNum
-  print str(curNum) + " has a sequence of "+str(count)
-print str(num) + " has a sequence of "+str(maxCount)
+  known[onum] = known[num] + count
+  return known[onum]
+
+maxVal = (0,0)
+for i in range(1,10**6):
+  count = calcIters(i)
+  print str(i) + " has a sequence of " + str(count)
+  if count > maxVal[1]:
+    maxVal = (i, count)
+
+print maxVal

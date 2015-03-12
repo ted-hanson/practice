@@ -7,4 +7,4 @@ def dsum(a,b):
 def sumDigits(n):
   return reduce(dsum, digits(n))
 
-print sumDigits(2**1000)
+print sumDigits(2**1000000)
