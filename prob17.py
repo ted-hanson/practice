@@ -44,7 +44,8 @@ def digits(n):
   if i == 0 or int(s) == 0:
     return ''
   elif i > 3:
-    # map digits to hundreds correctly: 123|457 -> 1:get next 3 digits, 2: get next 2 digits, 3: only get 1 digit, 4:3, 5:2, 6:1
+    # map digits to hundreds correctly: 654|321
+    # --> 6:get next 3 digits, 5: get next 2 digits, 4: only get 1 digit
     lead = (i + 2) % 3 + 1 
     # get number on the left side of 10**3
     left = digits(int(s[:lead])) + words[10**(i-lead)]
