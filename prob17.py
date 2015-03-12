@@ -29,7 +29,8 @@ words = {
     10**3: 'thousand ',
     10**6: 'million ',
     10**9: 'billion ',
-    10**12: 'trillion '
+    10**12: 'trillion ',
+    10**15: 'quadrillion '
   }
 
 def digits(n):
@@ -38,11 +39,19 @@ def digits(n):
   i = len(s)
   if i == 0 or s == '0':
     return ''
+  elif i > 3:
+    # map digits to hundreds correctly: 123|457 -> 1:get next 3 digits, 2: get next 2 digits, 3: only get 1 digit, 4:3, 5:2, 6:1
+    lead = (i + 2) % 3 + 1 
+    # get number before factor of 10**3
+    left = digits(int(s[:lead])) + words[10**(i-lead)]
+    # get number after factor of 10**3
+    right = digits(int(s[lead:]))
+    words[n] = left + ('and ' if right != '' and len(str(int(s[lead:]))) <= 2 else '') + right
+    return words[n]
+  # take custom <3 digits before automating
   elif n in words:
-    if i > 3:
-      return 'one ' + words[n]
-    else:
-      return words[n]
+    return words[n]
+  # make word for two digit numbers
   elif i == 2:
     return words[int(s[0])*10] + digits(int(s[1:])) 
   elif i == 3:
@@ -50,15 +59,6 @@ def digits(n):
     v = digits(int(s[1:])) 
     if v != '':
       u += 'and '
-    return u + v 
-  elif i > 3:
-    lead = (i+2)%3+1 # map digits correctly: 123|457 -> 1:3, 2:2, 3:1, 4:3, 5:2, 6:1
-    # split digits before 3*n digits ie (12)|345 and then print the name appended to the following number
-    u = digits(int(s[:lead])) + words[10**(i-lead)]
-    v = digits(int(s[lead:]))
-    if v != '' and len(str(int(s[lead:]))) <= 2:
-      u += 'and '
-    words[n] = u + v 
-    return words[n]
+    return u + v
 
 print sum([len(digits(i).replace(' ', '')) for i in range(1, 1001)])
